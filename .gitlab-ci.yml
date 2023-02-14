@@ -1,0 +1,25 @@
+stages:
+  - build
+  - test
+
+mvn-build:
+  stage: build
+  tags: 
+    - maven
+  script:
+    - mvn package -DskipTests=true
+
+mvn-test:
+  stage: test
+  tags: 
+    - maven
+  script:
+    - mvn test
+    - mvn surefire-report:report-only  
+  
+  artifacts:
+    paths:
+      - target/site/*.html
+      - target/surefire-reports/*.xml
+    reports:
+      junit: target/surefire-reports/*.xml
